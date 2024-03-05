@@ -7,7 +7,8 @@
 </head>
 <body>
     <button onclick="requestCameraPermission()">Scan Barcode</button>
-    <p id="result"></p>
+    <p id="result" style="margin-bottom: 20px;"></p>
+	<video id="video1" width="720" height="540" autoplay muted></video>
 
     <!-- Thêm thư viện ZXing vào dự án -->
     <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
@@ -24,27 +25,35 @@
                 // Yêu cầu quyền truy cập camera
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function (stream) {
-                        // Hiển thị video từ camera trong một element video
-                        var video = document.createElement('video');
-                        video.srcObject = stream;
-                        /*video.play();*/
+                        //// Hiển thị video từ camera trong một element video
+                        //var video = document.createElement('video');
+                        //video.srcObject = stream;
+                        ///*video.play();*/
 
-                        //var isPlaying = video.currentTime > 0 && !video.paused && !video.ended
-                        //    && video.readyState > video.HAVE_CURRENT_DATA;
+                        ////var isPlaying = video.currentTime > 0 && !video.paused && !video.ended
+                        ////    && video.readyState > video.HAVE_CURRENT_DATA;
 
-                        //if (!isPlaying) {
+                        ////if (!isPlaying) {
+                        ////    video.play();
+                        ////}
+                        //video.play().then(() => {
+                        //    video.pause();
+                        //    video.currentTime = 0;
                         //    video.play();
-                        //}
-                        video.play().then(() => {
-                            video.pause();
-                            video.currentTime = 0;
-                            video.play();
+                        //})
+						
+						const video1 = document.getElementById("video");
+                        video1.srcObject = stream;
+                        video1.play().then(() => {
+                            video1.pause();
+                            video1.currentTime = 0;
+                            video1.play();
                         })
 
 
                         // Sử dụng thư viện ZXing để quét mã vạch
                         let decoder = new ZXing.BrowserMultiFormatReader();
-                        decoder.decodeFromVideoDevice(undefined, video, function (result) {
+                        decoder.decodeFromVideoDevice(undefined, video1, function (result) {
                             // Hiển thị giá trị mã vạch lên màn hình
                             console.log(result)
                             document.getElementById('result').innerText = result.text;
