@@ -20,11 +20,16 @@
             })
         }
         function requestCameraPermission() {
+            console.log("ok nè x");
+            alert("ok nè y.");
             // Kiểm tra xem trình duyệt có hỗ trợ API getUserMedia hay không
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 // Yêu cầu quyền truy cập camera
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function (stream) {
+                        console.log("ok nè 1 x");
+                        alert("ok nè 1 y.");
+
                         //// Hiển thị video từ camera trong một element video
                         //var video = document.createElement('video');
                         //video.srcObject = stream;
@@ -62,6 +67,10 @@
                         decoder.decodeFromVideoDevice(undefined, video1, function (result) {
                             // Hiển thị giá trị mã vạch lên màn hình
                             console.log(result)
+
+                            console.log("ok nè 2 x");
+                            alert("ok nè 2 y.");
+
                             document.getElementById('result').innerText = result.text;
                         });
                     })
