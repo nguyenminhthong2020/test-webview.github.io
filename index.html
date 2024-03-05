@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner Webview</title>
+</head>
+<body>
+    <button onclick="requestCameraPermission()">Scan Barcode</button>
+    <p id="result"></p>
+
+    <!-- Thêm thư viện ZXing vào dự án -->
+    <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+    <script>
+        async function waitForTabFocus() {
+            return new Promise((resolve, reject) => {
+                const onFocus = () => { resolve(); window.removeEventListener('focus', onFocus) };
+                window.addEventListener('focus', onFocus)
+            })
+        }
+        function requestCameraPermission() {
+            // Kiểm tra xem trình duyệt có hỗ trợ API getUserMedia hay không
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Yêu cầu quyền truy cập camera
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        // Hiển thị video từ camera trong một element video
+                        var video = document.createElement('video');
+                        video.srcObject = stream;
+                        /*video.play();*/
+
+                        //var isPlaying = video.currentTime > 0 && !video.paused && !video.ended
+                        //    && video.readyState > video.HAVE_CURRENT_DATA;
+
+                        //if (!isPlaying) {
+                        //    video.play();
+                        //}
+                        video.play().then(() => {
+                            video.pause();
+                            video.currentTime = 0;
+                            video.play();
+                        })
+
+
+                        // Sử dụng thư viện ZXing để quét mã vạch
+                        let decoder = new ZXing.BrowserMultiFormatReader();
+                        decoder.decodeFromVideoDevice(undefined, video, function (result) {
+                            // Hiển thị giá trị mã vạch lên màn hình
+                            console.log(result)
+                            document.getElementById('result').innerText = result.text;
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error('Error accessing camera:', error);
+                    });
+            } else {
+                alert('Trình duyệt không hỗ trợ truy cập camera.');
+            }
+        }
+    </script>
+</body>
+</html>
