@@ -8,7 +8,7 @@
 <body>
     <button onclick="requestCameraPermission()">Scan Barcode</button>
     <p id="result" style="margin-bottom: 20px;"></p>
-	<video id="video1" width="720" height="540" autoplay muted></video>
+	<video id="video1" width="720" height="540"></video>
 
     <!-- Thêm thư viện ZXing vào dự án -->
     <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
@@ -42,8 +42,14 @@
                         //    video.play();
                         //})
 						
-						const video1 = document.getElementById("video");
-                        video1.srcObject = stream;
+						const video1 = document.getElementById("video1");
+                        //video1.srcObject = stream;
+						//video1.current.srcObject = stream;
+						if (video1.current) 
+						{
+							//video1.current.srcObject = stream;
+							video1.current.srcObject = stream.streams[0];
+						}
                         video1.play().then(() => {
                             video1.pause();
                             video1.currentTime = 0;
